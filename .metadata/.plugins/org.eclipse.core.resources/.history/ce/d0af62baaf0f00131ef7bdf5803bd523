@@ -1,0 +1,106 @@
+package com.will.demohandler;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.app.Activity;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends Activity {
+
+	private static final String TAG = "MainActivity";
+	private static final String UPPER_NUM = "upper"; 
+	EditText etNum;
+	Button bnCal;
+	TextView etResult;
+	CalThread calThread;
+	
+	class CalThread extends Thread {
+		
+		public Handler threadHandler;
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			Looper.prepare();
+			threadHandler = new Handler() {
+
+				@Override
+				public void handleMessage(Message msg) {
+					// TODO Auto-generated method stub
+					if (msg.what == 0x123) {
+						int upper = msg.getData().getInt(UPPER_NUM);
+						List<Integer> nums = new ArrayList<Integer>();
+						outer:
+							for (int i = 0; i <= upper; i++) {
+								for (int j = 0; j <= Math.sqrt(i); j++) {
+									if (i != 2 && i %j == 0) {
+										continue outer;
+									}
+								}
+								nums.add(i);
+							}
+						Toast.makeText(MainActivity.this, nums.toString(), Toast.LENGTH_LONG).show();
+					}
+				}
+				
+			};
+			Looper.loop();
+		}
+	}
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.calculator);
+        etNum = (EditText) findViewById(R.id.editNum);
+        bnCal = (Button) findViewById(R.id.calculate);
+        etResult = (TextView) findViewById(R.id.result);
+        bnCal.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Message msg = new Message();
+				msg.what = 0x123;
+				Bundle bundle = new Bundle();
+				bundle.putInt(UPPER_NUM, Integer.parseInt(etNum.getText().toString()));
+				msg.setData(bundle);
+				calThread.threadHandler.sendMessage(msg);
+			}
+        	
+        });
+        
+        final Handler myHandler = new Handler() {
+
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+			}
+        	
+        };
+        
+        calThread = new CalThread();
+        calThread.start();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    
+}
