@@ -94,8 +94,6 @@ public class MainActivity extends Activity {
         	
         });
         
-        // In UI thread, system has help us construct a Looper instance, 
-        // so we just need to construct an Handler isntance.
         myHandler = new Handler() {
 
 			@Override
@@ -112,4 +110,13 @@ public class MainActivity extends Activity {
         calThread = new CalThread();
         calThread.start();
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    
 }
