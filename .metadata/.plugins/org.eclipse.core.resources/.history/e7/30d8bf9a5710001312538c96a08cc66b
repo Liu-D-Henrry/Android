@@ -67,7 +67,6 @@ public class AsyncTaskTest extends Activity {
     	ProgressDialog pdialog;
     	
     	@Override
-    	//After doInBackground() has finished, this function will be called.
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
     		content.setText(result);
@@ -75,7 +74,6 @@ public class AsyncTaskTest extends Activity {
 		}
 
 		@Override
-		//This function will be called before doInBackground()
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			pdialog = new ProgressDialog(myContext);
@@ -89,7 +87,6 @@ public class AsyncTaskTest extends Activity {
 		}
 
 		@Override
-		//This function will be called when publishProgress() is called in doInBackground()
 		protected void onProgressUpdate(Integer... values) {
 			// TODO Auto-generated method stub
 			content.setText("Has read [ " + values + " ] lines");
@@ -101,7 +98,6 @@ public class AsyncTaskTest extends Activity {
     	}
 
 		@Override
-		//Something we need to do and will consume a period of time are put here.
 		protected String doInBackground(URL... params) {
 			// TODO Auto-generated method stub
 			StringBuilder sb = new StringBuilder();
