@@ -1,0 +1,26 @@
+package com.will.demofragment;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.TextView;
+
+public class FirstDemo extends Activity implements FirstFragment.Callbacks {
+
+	TextView show;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.first_demo);
+		
+		show = (TextView) findViewById(R.id.show);
+	}
+
+	@Override
+	public void clickButton() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
