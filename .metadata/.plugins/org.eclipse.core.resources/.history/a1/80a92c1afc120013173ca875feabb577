@@ -1,0 +1,22 @@
+package com.will.demoservice;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.Button;
+
+public class IntentServiceActivity extends Activity {
+
+	private static final String TAG = "IntentServiceActivity";
+	
+	Button startMyService, startIntentService;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.intent_service_activity);
+		
+		
+	}
+
+}

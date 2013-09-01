@@ -1,0 +1,69 @@
+package com.will.demoservice;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+public class DemoServiceActivity extends Activity {
+	
+	private static final String TAG = "DemoServiceActivity";
+	
+	Button startService, stopService, bindService, unbindService, startIntentService, startAIDLService;
+	Intent intent;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.service_activity);
+		startService = (Button) findViewById(R.id.startService);
+		stopService = (Button) findViewById(R.id.stopService);
+		bindService = (Button) findViewById(R.id.bindService);
+//		unbindService = (Button) findViewById(R.id.unbindService);
+		startIntentService = (Button) findViewById(R.id.startIntentService);
+		startAIDLService = (Button) findViewById(R.id.startAIDLService);
+		
+		intent = new Intent();
+		intent.setAction("com.will.demoservice.START_SERVICE");
+		
+		startService.setOnClickListener(new ButtonClickListener(intent));
+		stopService.setOnClickListener(new ButtonClickListener(intent));
+	}
+	
+	private class ButtonClickListener implements OnClickListener {
+
+		Intent intent;
+		
+		public ButtonClickListener(Intent intent) {
+			this.intent = intent;
+		}
+		
+		@Override
+		public void onClick(View view) {
+			// TODO Auto-generated method stub
+			switch (view.getId()) {
+			case R.id.startService:
+				Log.d(TAG, "Trying to start service");
+				startService(intent);
+				break;
+			case R.id.stopService:
+				Log.d(TAG, "Trying to stop service");
+				stopService(intent);
+				break;
+			}
+		}
+		
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+}

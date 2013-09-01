@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DemoService</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <string name="startService">Start Service</string>
+    <string name="bindService">Bind Service</string>
+    <string name="startIntentSercieActivity"></string>
+    <string name="startAIDLServiceActivity"></string>
+
+</resources>

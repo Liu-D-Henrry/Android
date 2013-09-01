@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/startService" />
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+    	<Button
+        	android:id="@+id/startService"
+        	android:layout_width="0dp"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/startService" />
+    	<Button
+        	android:id="@+id/stopService"
+        	android:layout_width="0dp"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/stopService" />
+    	
+    </LinearLayout>
+    
+	<TextView 
+		android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/bindService" />
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    
+    	<Button
+        	android:id="@+id/startBindService"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@string/startBindService" />
+    	
+		<Button
+        	android:id="@+id/stopBindService"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@string/stopBindService" />
+    
+	</LinearLayout>
+    <Button
+        android:id="@+id/bindService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bindService" />
+    <Button
+        android:id="@+id/unbindService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/unbindService" />
+    <Button
+        android:id="@+id/startIntentService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/startIntentService" />
+    <Button
+        android:id="@+id/startAIDLService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/startAIDLService" />
+
+</LinearLayout>
