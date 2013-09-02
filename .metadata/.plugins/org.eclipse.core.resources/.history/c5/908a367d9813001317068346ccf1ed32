@@ -1,0 +1,32 @@
+package com.will.complexservice;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Person implements Parcelable {
+
+	private int id;
+	private String name;
+	private String pass;
+	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+}

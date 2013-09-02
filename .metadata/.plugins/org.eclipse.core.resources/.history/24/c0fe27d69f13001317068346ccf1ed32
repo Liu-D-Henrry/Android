@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ComplexClient</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string name="textTitle">Get Remote Service Status</string>
+    <string name="textInput">Please input owners name</string>
+    <string name="textHint">Owner's name</string>
+</resources>

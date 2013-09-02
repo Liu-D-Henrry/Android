@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -30,6 +30,7 @@
         </activity>
         
         <service
+            android:exported="false"
             android:name="com.will.demoservice.MyIntentService">
             <intent-filter >
                 <action android:name="com.will.demoservice.MY_INTENT_SERVICE"/>
@@ -37,6 +38,7 @@
         </service>
         
         <service
+            android:exported="false"
             android:name="com.will.demoservice.MyService">
             <intent-filter >
                 <action android:name="com.will.demoservice.MY_SERVICE"/>
@@ -44,6 +46,7 @@
         </service>
         
         <service 
+            android:exported="false"
             android:name="com.will.demoservice.DemoStartService">
            <intent-filter >
                <action android:name="com.will.demoservice.START_SERVICE"/>
@@ -51,6 +54,7 @@
         </service>
         
         <service 
+            android:exported="false"
             android:name="com.will.demoservice.DemoBindService">
             <intent-filter >
                 <action android:name="com.will.demoservice.BIND_SERVICE"/>

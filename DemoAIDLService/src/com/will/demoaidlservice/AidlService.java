@@ -33,7 +33,7 @@ public class AidlService extends Service {
 	private String color;
 	private double weight;
 	
-	public class CatBinder extends com.will.demoaidlservice.ICat.Stub {
+	public class CatBinder extends Stub {
 
 		@Override
 		public String getColor() throws RemoteException {
