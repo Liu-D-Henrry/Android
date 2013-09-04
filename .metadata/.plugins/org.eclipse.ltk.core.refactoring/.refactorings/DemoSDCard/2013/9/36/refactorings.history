@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;DemoSDCard/res/layout/activity_main.xml&apos; to &apos;file_list.xml&apos;" description="Rename resource &apos;activity_main.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="res/layout/activity_main.xml" name="file_list.xml" stamp="1378198664627" updateReferences="true"/>
+</session>

@@ -1,0 +1,37 @@
+package com.will.demosdcard;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class MainActivity extends Activity {
+
+	private static final String FILE_NAME = "/test/DemoSDCrad";
+	EditText content;
+	TextView show;
+	Button write, read;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.demo_sdcard);
+		
+		content = (EditText) findViewById(R.id.writeContent);
+		show = (TextView) findViewById(R.id.show);
+		write = (Button) findViewById(R.id.write);
+		read = (Button) findViewById(R.id.read);
+		
+		
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+}

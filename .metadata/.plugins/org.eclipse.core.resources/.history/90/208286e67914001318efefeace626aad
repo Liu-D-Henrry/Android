@@ -1,0 +1,20 @@
+package com.will.demosdcard;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+public class FileExplorer extends Activity {
+
+	private static final String TAG = "FileExplorer";
+	TextView path;
+	ListView list;
+	Button parent;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.file_list);
+	}
+
+}
