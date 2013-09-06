@@ -1,0 +1,26 @@
+package com.will.dictionarytool;
+
+import com.will.dictionary.Words;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.provider.UserDictionary.Words;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+public class ResultActivity extends Activity {
+
+	ListView list;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.result);
+		
+		list = (ListView) findViewById(R.id.result);
+		
+		SimpleAdapter adapter = new SimpleAdapter(ResultActivity.this, list, R.layout.line, new String[] {Words.}, null);
+	}
+
+}

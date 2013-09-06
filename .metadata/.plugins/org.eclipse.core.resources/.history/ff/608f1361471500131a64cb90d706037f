@@ -1,0 +1,23 @@
+package com.will.dictionary;
+
+import java.util.List;
+import java.util.Map;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
+public class ResultActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		Intent intent = this.getIntent();
+		Bundle data = intent.getExtras();
+		@SuppressWarnings("unchecked")
+		List<Map<String, String>> list = (List<Map<String, String>>) data.getSerializable("data");
+		Simpleapter adapter = new SimpleAdapter();
+	}
+
+}

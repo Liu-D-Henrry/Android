@@ -1,0 +1,20 @@
+package com.will.dictionarytool;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.ListView;
+
+public class ResultActivity extends Activity {
+
+	ListView list;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.result);
+		
+		list = (ListView) findViewById(R.id.result);
+	}
+
+}

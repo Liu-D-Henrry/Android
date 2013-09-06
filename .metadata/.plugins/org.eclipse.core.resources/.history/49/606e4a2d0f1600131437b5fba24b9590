@@ -1,0 +1,44 @@
+package com.will.dictionarytool;
+
+import android.os.Bundle;
+import android.provider.UserDictionary.Words;
+import android.app.Activity;
+import android.content.ContentValues;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class DictionaryTool extends Activity {
+
+	Button insert, search;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+		
+		insert = (Button) findViewById(R.id.insert);
+		insert.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				// TODO Auto-generated method stub
+				String word = ((EditText) findViewById(R.id.word)).getText().toString();
+				String detail = ((EditText) findViewById(R.id.detail)).getText().toString();
+				ContentValues values = new ContentValues();
+				values.put(Words.Word.WORD, word);
+			}
+			
+		});
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.dictionary_tool, menu);
+		return true;
+	}
+
+}

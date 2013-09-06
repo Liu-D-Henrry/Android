@@ -1,7 +1,0 @@
-package com.will.demofragment;
-
-import android.app.Activity;
-
-public class FirstDemo extends Activity {
-
-}

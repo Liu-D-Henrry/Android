@@ -1,0 +1,6 @@
+package com.will.dictionary;
+
+public final class Words {
+
+	public static final String AUTHORITY = "org.crazyit.providers.dictprovider";
+}
