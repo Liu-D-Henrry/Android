@@ -1,5 +1,0 @@
-package com.will.complexservice;
-
-interface IPet {
-	List<Pet> getPets(in Person owner);
-}

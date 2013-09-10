@@ -1,0 +1,235 @@
+package com.will.democontactprovider;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.ContactsContract;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.database.Cursor;
+import android.database.DataSetObserver;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.AbsListView.LayoutParams;
+
+public class MainActivity extends Activity {
+
+	private static final String TAG = "MainActivity";
+	
+	Button get;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		final ArrayList<String> names = new ArrayList<String>();
+		final ArrayList<ArrayList<String>> details = new ArrayList<ArrayList<String>>();
+				
+		
+		final Handler myHandler = new Handler() {
+
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				if (msg.what == 0x123) {
+					
+				}
+			}
+			
+		};
+		
+		get = (Button) findViewById(R.id.buttonContact);
+		get.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+//				final ArrayList<String> names = new ArrayList<String>();
+//				final ArrayList<ArrayList<String>> details = new ArrayList<ArrayList<String>>();
+				
+				new Thread() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						final ArrayList<String> names = new ArrayList<String>();
+						final ArrayList<ArrayList<String>> details = new ArrayList<ArrayList<String>>();
+						Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+						while (cursor.moveToNext()) {
+							
+							String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+							
+							String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+							names.add(name);
+							
+							Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
+									null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + contactId, null, null);
+							ArrayList<String> detail = new ArrayList<String>();
+							while (phones.moveToNext()) {
+								String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+								detail.add(phone);
+							}
+							phones.close();
+							
+							Cursor emails = getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, 
+									null, ContactsContract.CommonDataKinds.Email.CONTACT_ID, null, null);
+							while (emails.moveToNext()) {
+								String email = emails.getString(emails.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+								detail.add(email);
+							}
+							emails.close();
+							details.add(detail);
+						}
+						cursor.close();
+						
+						Message msg = new Message();
+						msg.what = 0x123;
+					}
+					
+				};
+				Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+				while (cursor.moveToNext()) {
+					
+					String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+					
+					String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+					names.add(name);
+					
+					Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
+							null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + contactId, null, null); 
+					ArrayList<String> detail = new ArrayList<String>();
+					while (phones.moveToNext()) {
+						String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+						detail.add(phone);
+					}
+					phones.close();
+					
+					Cursor emails = getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, 
+							null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + "=" + contactId, null, null);
+					while (emails.moveToNext()) {
+						String email = emails.getString(emails.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+						detail.add(email);
+					}
+					emails.close();
+					
+					details.add(detail);
+				}
+				cursor.close();
+				
+				setupView(names, details);
+			}
+
+			private void setupView(final ArrayList<String> names, final ArrayList<ArrayList<String>> details) {
+				// TODO Auto-generated method stub
+				View resultDialog = getLayoutInflater().inflate(R.layout.result, null);
+				
+				ExpandableListView list = (ExpandableListView) resultDialog.findViewById(R.id.list);
+				ExpandableListAdapter adapter = new BaseExpandableListAdapter() {
+
+					@Override
+					public Object getChild(int groupPosition, int childPosition) {
+						// TODO Auto-generated method stub
+						return details.get(groupPosition).get(childPosition);
+					}
+
+					@Override
+					public long getChildId(int groupPosition, int childPosition) {
+						// TODO Auto-generated method stub
+						return childPosition;
+					}
+
+					private TextView getTextView() {
+						AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100);
+						TextView textView = new TextView(MainActivity.this);
+						textView.setLayoutParams(lp);
+						textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+						textView.setPadding(100, 0, 0, 0);
+						textView.setTextSize(20);
+						return textView;
+					}
+					
+					@Override
+					public View getChildView(int groupPosition,
+							int childPosition, boolean isLastChild,
+							View convertView, ViewGroup parent) {
+						// TODO Auto-generated method stub
+						TextView textView = getTextView();
+						textView.setText(getChild(groupPosition, childPosition).toString());
+						return textView;
+					}
+
+					@Override
+					public int getChildrenCount(int groupPosition) {
+						// TODO Auto-generated method stub
+						return details.get(groupPosition).size();
+					}
+
+					@Override
+					public Object getGroup(int groupPosition) {
+						// TODO Auto-generated method stub
+						return names.get(groupPosition);
+					}
+
+					@Override
+					public int getGroupCount() {
+						// TODO Auto-generated method stub
+						return names.size();
+					}
+
+					@Override
+					public long getGroupId(int groupPosition) {
+						// TODO Auto-generated method stub
+						return groupPosition;
+					}
+
+					@Override
+					public View getGroupView(int groupPosition,
+							boolean isExpanded, View convertView,
+							ViewGroup parent) {
+						// TODO Auto-generated method stub
+						TextView textView = getTextView();
+						textView.setText(getGroup(groupPosition).toString());
+						return textView;
+					}
+
+					@Override
+					public boolean hasStableIds() {
+						// TODO Auto-generated method stub
+						return true;
+					}
+
+					@Override
+					public boolean isChildSelectable(int groupPosition,
+							int childPosition) {
+						// TODO Auto-generated method stub
+						return true;
+					}
+					
+				};
+				
+				list.setAdapter(adapter);
+				new AlertDialog.Builder(MainActivity.this).setView(resultDialog).setPositiveButton("OK", null).show();
+			}
+			
+		});
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+}

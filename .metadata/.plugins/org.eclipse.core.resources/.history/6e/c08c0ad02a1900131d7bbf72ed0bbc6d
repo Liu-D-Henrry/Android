@@ -1,0 +1,86 @@
+package com.will.phoneblocker;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
+
+public class BlockedListActivity extends Activity {
+
+	private static final String TAG = "-- BlockedListActivity --";
+	private static final String SERVICE_INTENT = "com.will.phoneblocker.BLOCK_SERVICE";
+	
+	private SharedPreferences preferences;
+	private SharedPreferences.Editor editor;
+	private BlockerApplication application;
+	private ListView blockedList;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.blocked_list_activity);
+		application = (BlockerApplication) getApplication();
+		blockedList = (ListView) findViewById(R.id.blocked_list);
+		preferences = getSharedPreferences("auto_service", MODE_PRIVATE);
+		editor = preferences.edit();
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent();
+		
+		switch (item.getItemId()) {
+		case R.id.service:
+			intent.setAction(SERVICE_INTENT);
+			if (application.isServiceRunning()) {
+				Toast.makeText(this, "Stop menu", Toast.LENGTH_LONG).show();
+				item.setIcon(android.R.drawable.ic_media_play);
+				editor.putBoolean("auto_start_service", false);
+				Log.i(TAG, "auto_start_service=" + preferences.getBoolean("auto_start_service", false));
+				stopService(intent);
+			} else {
+				Toast.makeText(this, "Start menu", Toast.LENGTH_LONG).show();
+				item.setIcon(android.R.drawable.ic_media_pause);
+				editor.putBoolean("auto_start_service", true);
+				startService(intent);
+			}
+			break;
+		case R.id.blacklistactivity:
+			Toast.makeText(this, "BlackList menu", Toast.LENGTH_LONG).show();
+			intent.setClass(BlockedListActivity.this, BlackListActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.exit:
+			Toast.makeText(this, "Exit menu", Toast.LENGTH_LONG).show();
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+		// TODO Auto-generated method stub
+		MenuItem toggleItem = menu.findItem(R.id.service);
+		if (application.isServiceRunning()) {
+			toggleItem.setTitle(R.string.titleStop);
+			toggleItem.setIcon(android.R.drawable.ic_media_pause);
+		} else {
+			toggleItem.setTitle(R.string.titleStart);
+			toggleItem.setIcon(android.R.drawable.ic_media_play);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.blocked_list_menu, menu);
+		return true;
+	}
+
+}

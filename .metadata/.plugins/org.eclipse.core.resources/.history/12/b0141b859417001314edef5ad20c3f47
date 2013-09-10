@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PhoneBlocker</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string name="titleService">Start</string>
+    <string name="titleBlackList">Black List</string>
+    <string name="titleExit">Exit</string>
+</resources>

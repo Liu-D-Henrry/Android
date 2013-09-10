@@ -1,0 +1,28 @@
+package com.will.phoneblocker;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.util.Log;
+
+public class LaunchReceiver extends BroadcastReceiver {
+
+	private static final String TAG = "-- BroadcastReceiver --";
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		SharedPreferences preferences = context.getSharedPreferences(BlockerApplication.AUTO_SERVICE, Context.MODE_PRIVATE);
+		boolean autoStartService = preferences.getBoolean(BlockerApplication.AUTO_SERVICE_ITEM, false);
+		Log.i(TAG, "Going to start service! " + autoStartService);
+		if (autoStartService) {
+			Intent intent = new intent("com.will.phoneblocker.BLOCK_SERVICE");
+			Intent tIntent = new Intent(context, BlockService.class);
+			context.startService(tIntent);
+		} else {
+			Log.i(TAG, "Function auto start service has been closed.");
+		}
+	}
+
+}

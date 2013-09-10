@@ -1,0 +1,12 @@
+package com.will.phoneblocker;
+
+import android.app.Application;
+
+public class BlockerApplication extends Application {
+
+	private boolean serviceRunning;
+	
+	public boolean isServiceRunning() {
+		return this.sericeRunning;
+	}
+}

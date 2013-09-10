@@ -1,0 +1,25 @@
+package com.will.phoneblocker;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.util.Log;
+
+public class LaunchReceiver extends BroadcastReceiver {
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		SharedPreferences preferences = context.getSharedPreferences(BlockerApplication.AUTO_SERVICE, Context.MODE_PRIVATE);
+		boolean autoStartService = preferences.getBoolean(BlockerApplication.AUTO_SERVICE_ITEM, false);
+		if (autoStartService) {
+			Intent tIntent = new Intent(context, LaunchReceiver.class);
+			context.startService(tIntent);
+		} else {
+			
+		}
+	}
+
+}

@@ -1,7 +1,0 @@
-package com.will.demofragment;
-
-import android.app.Fragment;
-
-public class ThirdFragment extends Fragment {
-
-}

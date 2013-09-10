@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item 
+        android:id="@+id/start"
+        android:title="@string/titleStart" />
+    <item
+        android:id="@+id/stop"
+        android:title="@string/titleStop" />
+    <item
+        android:id="@+id/blacklist"
+        android:title="@string/titleBlackList" />
+    <item
+        android:id="@+id/titleExit"
+        android:title="@string/titleExit" />
+
+</menu>
