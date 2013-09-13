@@ -1,16 +1,19 @@
 package com.will.phoneblocker;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class BlockedListActivity extends Activity {
@@ -20,8 +23,9 @@ public class BlockedListActivity extends Activity {
 //	private static final String TEST = "com.will.phoneblocker.TEST";
 	
 	private BlockerApplication application;
+	private ActivityReceiver receiver;
 	private ListView blockedList;
-	private Button test;
+//	private Button test;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,51 @@ public class BlockedListActivity extends Activity {
 			
 		});
 		*/
+		
+		receiver = new ActivityReceiver();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(BlockerApplication.BROADCAST_ACTION);
+		registerReceiver(receiver, filter);
+		
+		ArrayList<HashMap<String, String>> list = application.getBlockedList();
+		SimpleAdapter adapter = new SimpleAdapter(BlockedListActivity.this, 
+				list, 
+				R.layout.blocked_item, 
+				new String[] {"name", "ringTime", "phone"}, 
+				new int[] {R.id.blocked_name, R.id.blocked_time, R.id.blocked_phone});
+		blockedList.setAdapter(adapter);
+	}
+	
+	public class ActivityReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			Log.i(TAG, "onReceive");
+			ArrayList<HashMap<String, String>> list = application.getBlockedList();
+			Log.i(TAG, list.toString());
+			SimpleAdapter adapter = new SimpleAdapter(BlockedListActivity.this, 
+					list, 
+					R.layout.blocked_item, 
+					new String[] {"name", "ringTime", "phone"}, 
+					new int[] {R.id.blocked_name, R.id.blocked_time, R.id.blocked_phone});
+			blockedList.setAdapter(adapter);
+		}
+		
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "onPause");
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "onResume");
+		super.onResume();
 	}
 
 	@Override
@@ -71,8 +120,6 @@ public class BlockedListActivity extends Activity {
 			intent.setClass(BlockedListActivity.this, BlackListActivity.class);
 			startActivity(intent);
 			break;
-		case R.id.exit:
-			Toast.makeText(this, "Exit menu", Toast.LENGTH_LONG).show();
 		}
 		return true;
 	}

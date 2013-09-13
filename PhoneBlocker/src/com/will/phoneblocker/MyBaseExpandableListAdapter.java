@@ -21,7 +21,6 @@ public class MyBaseExpandableListAdapter extends BaseExpandableListAdapter {
 	private final ArrayList<ArrayList<String>> details;
 	private HashMap<String, String> checkedItem = new HashMap<String, String>();
 	private BlockerApplication application;
-	private ArrayList<HashMap<String, String>> blackNumberList;
 	
 	public MyBaseExpandableListAdapter(BlackListActivity activity, final ArrayList<String> names, final ArrayList<ArrayList<String>>details) {
 		super();
@@ -30,7 +29,6 @@ public class MyBaseExpandableListAdapter extends BaseExpandableListAdapter {
 		this.details = details;
 		
 		application = (BlockerApplication) activity.getApplication();
-		blackNumberList = application.getBlackList();
 	}
 	
 	public HashMap<String, String> getCheckedItem() {

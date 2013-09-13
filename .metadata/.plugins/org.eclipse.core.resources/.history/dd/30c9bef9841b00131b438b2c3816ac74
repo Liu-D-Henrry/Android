@@ -1,0 +1,222 @@
+package com.will.phoneblocker;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.ContactsContract;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+
+public class BlackListActivity extends Activity {
+
+	private static final String TAG = "-- BlackListActivity --";
+	
+	private EditText phoneNumber;
+	private Button add;
+	private ProgressDialog pd;
+	private ListView blackList;
+	private BlockerApplication application;
+	private ArraryList<HashMap<String, String>> deleteList = new ArrayList<HashMap<String, String>>();
+	
+	Handler myHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			if (msg.what == 0x123) {
+				Bundle data = msg.getData();
+				@SuppressWarnings("unchecked")
+				final ArrayList<String> names = (ArrayList<String>) data.getSerializable("names");
+				@SuppressWarnings("unchecked")
+				final ArrayList<ArrayList<String>> details = (ArrayList<ArrayList<String>>) data.getSerializable("details");
+//				Log.d(TAG, details.toString());
+				setupView(names, details);
+			}
+		}
+		
+	};
+	
+	private abstract class Confirm implements DialogInterface.OnClickListener {}
+	private class OKConfirm extends Confirm {
+		
+		MyBaseExpandableListAdapter adapter;
+		
+		public OKConfirm(MyBaseExpandableListAdapter adapter) {
+			super();
+			this.adapter = adapter;
+		}
+
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			// TODO Auto-generated method stub
+			Log.d(TAG, adapter.getCheckedItem().toString());
+			HashMap<String, String> map = adapter.getCheckedItem();
+			for (Object key : map.keySet()) {
+				String phone = (String) key;
+				String name = map.get(key);
+				application.insertData(BlockerApplication.TABLE_BLACK_LIST, name, phone, null);
+			}
+			
+			setBlackList();
+		}
+		
+	}
+	
+	private void setupView(final ArrayList<String> names, final ArrayList<ArrayList<String>>details) {
+		View resultDialog = getLayoutInflater().inflate(R.layout.contacts_list, null);
+		ExpandableListView list = (ExpandableListView) resultDialog.findViewById(R.id.contactslist);
+		MyBaseExpandableListAdapter adapter = new MyBaseExpandableListAdapter(BlackListActivity.this, names, details);
+		list.setAdapter(adapter);
+		pd.dismiss();
+		new AlertDialog.Builder(BlackListActivity.this)
+			.setView(resultDialog)
+			.setPositiveButton("OK", new OKConfirm(adapter))
+			.show();
+	}
+	
+	private void setBlackList() {
+		ArrayList<HashMap<String, String>> blackNumberList = application.getBlackList();
+		Log.d(TAG, blackNumberList.toString());
+		SimpleAdapter adapter = new SimpleAdapter(BlackListActivity.this, 
+				blackNumberList, 
+				R.layout.line, 
+				new String[] {"name", "phone"}, 
+				new int[] {R.id.name, R.id.phone});
+		blackList.setAdapter(adapter);
+		blackList.setOnItemClickListener(new MyOnItemClickListener());
+	}
+	
+	private class MyOnItemClickListener implements OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			// TODO Auto-generated method stub
+			String name = ((TextView) view.findViewById(R.id.name)).getText().toString();
+			CheckBox cb = ((CheckBox) view.findViewById(R.id.phone));
+			String phone = cb.getText().toString();
+			if (cb.isChecked()) {
+				cb.setChecked(false);
+			} else {
+				cb.setChecked(true);
+			}
+		}
+		
+	}
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.black_list_activity);
+		application = (BlockerApplication) getApplication();
+		
+		phoneNumber = (EditText) findViewById(R.id.number);
+		blackList = (ListView) findViewById(R.id.blacklist);
+		
+		setBlackList();
+		
+		add = (Button) findViewById(R.id.add);
+		add.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				// TODO Auto-generated method stub
+				String phone = phoneNumber.getText().toString();
+				if (!phone.equals("")) {
+					application.insertData(BlockerApplication.TABLE_BLACK_LIST, "Unknown", phone, null);
+					Log.d(TAG, "Add = " + application.getBlackList().toString());
+					setBlackList();
+					phoneNumber.setText("");
+				}
+			}
+			
+		});
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		getMenuInflater().inflate(R.menu.black_list_menu, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		// TODO Auto-generated method stub
+		if (item.getItemId() == R.id.contacts) {
+			pd = new ProgressDialog(BlackListActivity.this);
+			pd.setTitle("Get Contacts");
+			pd.setMessage("Getting Contacts, please wait a moment...");
+			pd.show();
+			
+			new Thread() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					final ArrayList<String> names = new ArrayList<String>();
+					final ArrayList<ArrayList<String>> details = new ArrayList<ArrayList<String>>();
+					Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+					while (cursor.moveToNext()) {
+						String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+						
+						String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+						names.add(name);
+						
+						Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
+								null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + contactId, null, null);
+						ArrayList<String> detail = new ArrayList<String>();
+						while (phones.moveToNext()) {
+							String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+							detail.add(phone);
+						}
+						phones.close();
+						details.add(detail);
+					}
+					cursor.close();
+					
+					Message msg = new Message();
+					msg.what = 0x123;
+					Bundle data = new Bundle();
+					data.putSerializable("names", names);
+					data.putSerializable("details", details);
+					msg.setData(data);
+					myHandler.sendMessage(msg);
+				}
+				
+			}.start();
+		}
+		return  true;
+	}
+	
+}

@@ -12,4 +12,5 @@
     <string name="hintPhoneNumber">Phone Number</string>
     <string name="titleContacts">Contacts</string>
     <string name="textAdd">Add</string>
+    <string name="textDelete">Delete</string>
 </resources>

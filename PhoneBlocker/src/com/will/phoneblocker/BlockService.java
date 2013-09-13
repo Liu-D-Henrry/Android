@@ -1,6 +1,9 @@
 package com.will.phoneblocker;
 
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import com.android.internal.telephony.ITelephony;
 
@@ -19,6 +22,47 @@ public class BlockService extends Service {
 	private BlockerApplication application;
 	private TelephonyManager tManager;
 	
+	private PhoneStateListener listener = new PhoneStateListener() {
+
+		@Override
+		public void onCallStateChanged(int state, String incomingNumber) {
+			// TODO Auto-generated method stub
+			switch (state) {
+			case TelephonyManager.CALL_STATE_IDLE:
+				break;
+			case TelephonyManager.CALL_STATE_OFFHOOK:
+				break;
+			case TelephonyManager.CALL_STATE_RINGING:
+				Log.i(TAG, "phone number --> " + incomingNumber);
+				if (application.isBlack(incomingNumber)) {
+					Log.i(TAG, incomingNumber + "is black number");
+					try {
+						Method method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
+						IBinder binder = (IBinder) method.invoke(null, new Object[] { TELEPHONY_SERVICE });
+						ITelephony telephony = ITelephony.Stub.asInterface(binder);
+						telephony.endCall();
+						String name = application.getName(incomingNumber);
+						Log.d(TAG, "name=" + name);
+						Calendar cal = Calendar.getInstance();
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.CHINA);
+						String ringTime = sdf.format(cal.getTime());
+						application.insertData(BlockerApplication.TABLE_BLOCKED_LIST, 
+								name, incomingNumber, ringTime);
+						Intent intent = new Intent(BlockerApplication.BROADCAST_ACTION);
+						sendBroadcast(intent);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				break;
+			default:
+				break;
+			}
+			super.onCallStateChanged(state, incomingNumber);
+		}
+		
+	};
+	
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -35,38 +79,6 @@ public class BlockService extends Service {
 		application.setServiceRunning(true);
 		
 		tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		
-		PhoneStateListener listener = new PhoneStateListener() {
-
-			@Override
-			public void onCallStateChanged(int state, String incomingNumber) {
-				// TODO Auto-generated method stub
-				switch (state) {
-				case TelephonyManager.CALL_STATE_IDLE:
-					break;
-				case TelephonyManager.CALL_STATE_OFFHOOK:
-					break;
-				case TelephonyManager.CALL_STATE_RINGING:
-					Log.i(TAG, "phone number --> " + incomingNumber);
-					if (application.isBlack(incomingNumber)) {
-						Log.i(TAG, incomingNumber + "is black number");
-						try {
-							Method method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
-							IBinder binder = (IBinder) method.invoke(null, new Object[] { TELEPHONY_SERVICE });
-							ITelephony telephony = ITelephony.Stub.asInterface(binder);
-							telephony.endCall();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-					break;
-				default:
-					break;
-				}
-				super.onCallStateChanged(state, incomingNumber);
-			}
-			
-		};
 		tManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
 	}
 
@@ -74,8 +86,9 @@ public class BlockService extends Service {
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "onDestroy");
-		super.onDestroy();
 		application.setServiceRunning(false);
+		tManager.listen(listener, PhoneStateListener.LISTEN_NONE);
+		super.onDestroy();
 	}
 
 	@Override

@@ -3,18 +3,11 @@
     
     <item 
         android:id="@+id/service"
-        android:showAsAction="always"
         android:icon="@android:drawable/ic_media_play"
         android:title="@string/titleStart" />
     <item
         android:id="@+id/blacklistactivity"
-        android:showAsAction="always"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/titleBlackList" />
-    <item
-        android:id="@+id/exit"
-        android:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_close_clear_cancel"
-        android:title="@string/titleExit" />
 
 </menu>

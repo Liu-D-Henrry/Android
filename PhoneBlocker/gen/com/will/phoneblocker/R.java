@@ -21,28 +21,34 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int checkbox=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int action_settings=0x7f08000b;
-        public static final int add=0x7f080001;
-        public static final int blacklist=0x7f080002;
-        public static final int blacklistactivity=0x7f080009;
-        public static final int blocked_list=0x7f080003;
-        public static final int contacts=0x7f080007;
-        public static final int contactslist=0x7f080004;
-        public static final int exit=0x7f08000a;
-        public static final int name=0x7f080005;
-        public static final int number=0x7f080000;
-        public static final int phone=0x7f080006;
-        public static final int service=0x7f080008;
+        public static final int action_settings=0x7f08000f;
+        public static final int add=0x7f080002;
+        public static final int blacklist=0x7f080004;
+        public static final int blacklistactivity=0x7f08000e;
+        public static final int blocked_list=0x7f080008;
+        public static final int blocked_name=0x7f080005;
+        public static final int blocked_phone=0x7f080007;
+        public static final int blocked_time=0x7f080006;
+        public static final int contacts=0x7f08000c;
+        public static final int contactslist=0x7f080009;
+        public static final int delete=0x7f080003;
+        public static final int linearlayout=0x7f080000;
+        public static final int name=0x7f08000a;
+        public static final int number=0x7f080001;
+        public static final int phone=0x7f08000b;
+        public static final int service=0x7f08000d;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int black_list_activity=0x7f030001;
-        public static final int blocked_list_activity=0x7f030002;
-        public static final int contacts_list=0x7f030003;
-        public static final int line=0x7f030004;
+        public static final int blocked_item=0x7f030002;
+        public static final int blocked_list_activity=0x7f030003;
+        public static final int contacts_list=0x7f030004;
+        public static final int line=0x7f030005;
     }
     public static final class menu {
         public static final int black_list_menu=0x7f070000;
@@ -55,6 +61,7 @@ public final class R {
         public static final int hello_world=0x7f050002;
         public static final int hintPhoneNumber=0x7f050007;
         public static final int textAdd=0x7f050009;
+        public static final int textDelete=0x7f05000a;
         public static final int titleBlackList=0x7f050005;
         public static final int titleContacts=0x7f050008;
         public static final int titleExit=0x7f050006;
